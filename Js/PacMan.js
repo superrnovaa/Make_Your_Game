@@ -1,37 +1,16 @@
-const layout = [
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 1,
-  1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 
-  1, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1,
-  1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 
-  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 
-  1, 1, 1, 2, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 2, 1, 1, 1, 
-  1, 6, 6, 2, 1, 2, 1, 1, 0, 0, 0, 0, 1, 1, 2, 1, 2, 6, 6, 1, 
-  1, 1, 1, 2, 1, 2, 1, 1, 8, 7, 4, 9, 1, 1, 2, 1, 2, 1, 1, 1, 
-  1, 1, 1, 2, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 2, 1, 1, 1, 
-  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 
-  1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 
-  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-  1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 
-  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 
-  1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 
-  1, 2, 1, 2, 5, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 5, 2, 1, 2, 1, 
-  1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 
-  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-];
+import {layout1, layout2,layout3} from "./Levels.js"
 
 document.addEventListener("DOMContentLoaded", function () {
+  createHistoryDiv("IntroContainer")
   const start = document.querySelector(".StartButton");
   const grid = document.querySelector(".grid");
   const score = document.querySelector(".score");
   const timerElement = document.querySelector(".timer");
-  const winElement = document.createElement("div");
-  const winSound = new Audio("Sound/pacman_win.mp3");
-  const gameOverElement = document.createElement("div");
-  const deadSound = new Audio("Sound/pacman_death.wav");
+  const winSound = new Audio("../Sound/pacman_win.mp3");
+  const deadSound = new Audio("../Sound/pacman_death.wav");
   const playButtonText = start.firstChild;
   const restart = document.querySelector(".RestartButton");
+  const submit = document.querySelector(".SubmitButton");
   const moveInterval = 190; // Pacman Speed in milliseconds
   const directionMap = {
     right: "left",
@@ -46,37 +25,39 @@ document.addEventListener("DOMContentLoaded", function () {
     4: "ghostFour",
   };
 
- // let foundGhost = null;
+  // let foundGhost = null;
   let Flee = false;
   let livesNumber = 2;
+  let levels = 1;
+  let layout;
   let pacman = {
-    Position: 250, 
-    direction: null, 
+    Position: 250,
+    direction: null,
   };
   let ghostOne = {
-    Position: 170, 
-    direction: null, 
+    Position: 170,
+    direction: null,
     changeDirection: null,
     DefaultPosition: 170,
     ghostName: "ghostOne",
   };
   let ghostTwo = {
-    Position: 169, 
-    direction: null, 
+    Position: 169,
+    direction: null,
     changeDirection: null,
     DefaultPosition: 169,
     ghostName: "ghostTwo",
   };
   let ghostThree = {
     Position: 168,
-    direction: null, 
+    direction: null,
     changeDirection: null,
     DefaultPosition: 168,
     ghostName: "ghostThree",
   };
   let ghostFour = {
     Position: 171,
-    direction: null, 
+    direction: null,
     changeDirection: null,
     DefaultPosition: 171,
     ghostName: "ghostFour",
@@ -95,7 +76,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const Ghosts = [ghostOne, ghostTwo, ghostThree, ghostFour];
 
   start.addEventListener("click", StartGame);
-  restart.addEventListener("click", ResetGame);
+  restart.addEventListener("click", () => {
+    levels = 1; // Set the levels back to 1
+    ResetGame();
+  });
+  submit.addEventListener("click", function () {
+    AddScore(score.textContent, timerElement.textContent);
+  });
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);
   requestAnimationFrame(gameLoop);
@@ -103,6 +90,14 @@ document.addEventListener("DOMContentLoaded", function () {
   //creating all the small squares within the grid
   CreateGrid();
   function CreateGrid() {
+    if (levels === 1) {
+      layout = layout1;
+    } else if (levels === 2) {
+      layout = layout2;
+    } else if (levels === 3) {
+      layout = layout3;
+    }
+    
     for (let i = 0; i < layout.length; i++) {
       const div = document.createElement("div");
       div.classList.add("gridSquare");
@@ -138,9 +133,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function assignGrid() {
+    if (levels === 1) {
+      layout = layout1;
+    } else if (levels === 2) {
+      layout = layout2;
+    } else if (levels === 3) {
+      layout = layout3;
+    }
     for (let i = 0; i < layout.length; i++) {
       if (layout[i] === 1) {
-        gridSquare[i].classList.add("wall");
+        if (levels == 1) {
+        gridSquare[i].classList.add("wall1");
+        } else if (levels == 2) {
+          gridSquare[i].classList.add("wall2");
+          } else {
+            gridSquare[i].classList.add("wall3");
+          }
+          gridSquare[i].classList.add("wall");
       } else if (layout[i] === 2) {
         gridSquare[i].classList.add("food");
       } else if (layout[i] === 3) {
@@ -226,27 +235,18 @@ document.addEventListener("DOMContentLoaded", function () {
       gridSquare[pacIndex].classList.remove("ghostDead");
       gridSquare[pacIndex].classList.remove("ghostFlee");
     }, 1000);
-console.log(pacIndex);
-console.log("pppp");
-    // for (let i = 0; i < Ghosts.length; i++) {
-    //   console.log(Ghosts[i].Position);
-    // }
     const Ghosts = [ghostOne, ghostTwo, ghostThree, ghostFour];
 
     let foundGhost = null;
     for (let i = 0; i < Ghosts.length; i++) {
-     
       const ghost = Ghosts[i];
       if (ghost.Position === pacIndex) {
-        
         foundGhost = ghost;
         if (i < Ghosts.length - 1) {
-          foundGhost.ghostName = ghosts[i+1];
-          console.log(foundGhost.ghostName);
+          foundGhost.ghostName = ghosts[i + 1];
         } else {
           foundGhost.ghostName = "ghostFour"; // Set a default name for the last ghost
         }
-        console.log(foundGhost.ghostName);
         gridSquare[foundGhost.Position].classList.remove(foundGhost.ghostName);
         foundGhost.Position = foundGhost.DefaultPosition;
         gridSquare[foundGhost.Position].classList.add(foundGhost.ghostName);
@@ -258,7 +258,11 @@ console.log("pppp");
 
   function isValid(ghost, newPosition) {
     const Ghosts = ["ghostOne", "ghostTwo", "ghostThree", "ghostFour"];
-    if ((gridSquare[newPosition].classList.contains("wall")) || (newPosition== 158 )|| (newPosition == 141 )){
+    if (
+      gridSquare[newPosition].classList.contains("wall") ||
+      newPosition == 158 ||
+      newPosition == 141
+    ) {
       return false;
     } else if (
       Ghosts.some(
@@ -313,9 +317,10 @@ console.log("pppp");
 
   function StartGame() {
     if (playButtonText.textContent === "P L A Y") {
-     // ResetGame();
-       ActiveGame();
+      // ResetGame();
+      ActiveGame();
       playButtonText.textContent = "P O U S E";
+      removeHistoryDiv("IntroContainer");
     } else if (playButtonText.textContent === "P O U S E") {
       gameRunning = false;
       clearInterval(timerInterval);
@@ -324,7 +329,10 @@ console.log("pppp");
       gameRunning = true;
       timerInterval = setInterval(updateTimer, 1000);
       playButtonText.textContent = "P O U S E";
-    } else if (playButtonText.textContent === "PLAY AGAIN") {
+      if (document.querySelector(".DevelopContainer")) {
+        removeHistoryDiv("DevelopContainer")
+      }
+    } else if ((playButtonText.textContent === "PLAY AGAIN") || (playButtonText.textContent === "Next Level")) {
       ResetGame();
       ActiveGame();
       playButtonText.textContent = "P O U S E";
@@ -437,10 +445,10 @@ console.log("pppp");
     if (pacman.direction === "right") {
       if (pacmanNewPosition == 158) {
         pacmanNewPosition -= 17;
-        Move= true;
+        Move = true;
       } else {
-      pacmanNewPosition += 1;
-      Move = isValidMove(pacmanNewPosition);
+        pacmanNewPosition += 1;
+        Move = isValidMove(pacmanNewPosition);
       }
       if (Move) {
         ResetPacClasses();
@@ -456,10 +464,10 @@ console.log("pppp");
     } else if (pacman.direction === "left") {
       if (pacmanNewPosition == 141) {
         pacmanNewPosition += 17;
-        Move= true;
+        Move = true;
       } else {
-      pacmanNewPosition -= 1;
-      Move = isValidMove(pacmanNewPosition);
+        pacmanNewPosition -= 1;
+        Move = isValidMove(pacmanNewPosition);
       }
       if (Move) {
         ResetPacClasses();
@@ -513,7 +521,7 @@ console.log("pppp");
       numberOfFood--;
       if (numberOfFood === 0) {
         win();
-      }
+      } 
     } else if (gridSquare[pacIndex].classList.contains("pill")) {
       gridSquare[pacIndex].classList.remove("pill");
       changeToGhostFlee();
@@ -524,16 +532,26 @@ console.log("pppp");
     return true;
   }
 
+
   function win() {
     gameRunning = false;
-    winElement.classList.add("win");
-    winElement.textContent = "Congrats you won!";
-    grid.appendChild(winElement);
     scoreNumber = 0;
-    playButtonText.textContent = "PLAY AGAIN";
-    clearInterval(timerInterval);
-    winSound.play();
+    if (levels != 3) {
+      createHistoryDiv("DevelopContainer")
+      playButtonText.textContent = "Next Level";
+      clearInterval(timerInterval);
+      winSound.play();
+      levels +=1
+    } else {
+      ShowForm("win");
+      playButtonText.textContent = "PLAY AGAIN";
+      clearInterval(timerInterval);
+      winSound.play();
+      levels =1;
+    }
+    
   }
+
 
   function changeToGhostFlee() {
     Flee = true;
@@ -612,9 +630,7 @@ console.log("pppp");
 
   function EndGame() {
     gameRunning = false;
-    gameOverElement.classList.add("gameOver");
-    gameOverElement.textContent = "Game Over";
-    grid.appendChild(gameOverElement);
+    ShowForm("loss");
     scoreNumber = 0;
     playButtonText.textContent = "PLAY AGAIN";
     clearInterval(timerInterval);
@@ -623,33 +639,33 @@ console.log("pppp");
 
   function SetDefault() {
     pacman = {
-      Position: 250, 
-      direction: null, 
+      Position: 250,
+      direction: null,
     };
     ghostOne = {
-      Position: 170, 
-      direction: null, 
+      Position: 170,
+      direction: null,
       changeDirection: null,
       DefaultPosition: 170,
       ghostName: "ghostOne",
     };
     ghostTwo = {
-      Position: 169, 
-      direction: null, 
+      Position: 169,
+      direction: null,
       prevDirection: null,
       DefaultPosition: 169,
       ghostName: "ghostTwo",
     };
     ghostThree = {
-      Position: 168, 
-      direction: null, 
+      Position: 168,
+      direction: null,
       prevDirection: null,
       DefaultPosition: 168,
       ghostName: "ghostThree",
     };
     ghostFour = {
-      Position: 171, 
-      direction: null, 
+      Position: 171,
+      direction: null,
       prevDirection: null,
       DefaultPosition: 171,
       ghostName: "ghostFour",
@@ -693,16 +709,17 @@ console.log("pppp");
     ResetLives();
     playButtonText.textContent = "P L A Y";
     ResetGridClasses();
-    gameOverElement.remove();
-    winElement.remove();
+    RemoveForm();
     assignGrid();
+    removeHistoryDiv("DevelopContainer")
   }
 
   function ResetLives() {
     const livesContainer = document.querySelector(".LivesContainer");
     const life = document.createElement("div");
     life.className = "Life";
-    life.innerHTML = '<img class="PacLifeImage" src="Images/pacRight.svg">';
+    life.innerHTML =
+      '<img class="PacLifeImage" src="Style/Images/pacRight.svg">';
     while (livesNumber < 2) {
       const clone = life.cloneNode(true);
       livesContainer.appendChild(clone);

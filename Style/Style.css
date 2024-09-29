@@ -25,7 +25,7 @@ p {
   border: 1px solid rgba(255, 255, 255, 0.222);
   box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
   border-radius: 25px;
-  width: 50%;
+  width: 40%;
   height: 80%;
   display: flex;
   align-items: center;
@@ -84,9 +84,18 @@ p {
   background-image: url("Images/pacLeft.svg");
   background-size: contain;
 }
+
 .wall {
   background-color: #000000;
+}
+.wall1 {
   border: 1px double #2761c3;
+}
+.wall2 {
+  border: 1px double  #27c39f;
+}
+.wall3 {
+  border: 1px double #8b913a;
 }
 .ghostOne {
   background-color: rgb(205, 89, 89);
@@ -150,9 +159,10 @@ p {
   border: 1px solid rgba(255, 255, 255, 0.222);
   box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
   border-radius: 25px;
-  padding: 30px;
+  padding: 20px;
   width: 20%;
   height: 80%;
+  overflow: hidden;
 }
 
 main {
@@ -188,7 +198,8 @@ main {
 .ScoreContainer:hover,
 .TimerContainer:hover,
 .LivesContainer:hover,
-.StartButton:hover {
+.StartButton:hover,
+.SubmitButton:hover {
   border: 5px double  #27c39f ;
 }
 
@@ -246,18 +257,115 @@ main {
   }
 }
 
-.gameOver,.win {
+.FormContainer,.IntroContainer, .DevelopContainer, .winContainer, .lossContainer {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 30px;
   font-weight: bold;
-  color: #d83838;
+  color: white;
   background-color: black;
   overflow: hidden;
-  padding:15px;
   width: 60%;
-  border-radius: 15px;
-  text-align: center
+  border-radius: 30px;
+  text-align: center;
+  z-index: 1;
+  padding: 25px;
+  border: 2px solid #2761c3;
+}
+
+.IntroContainer, .DevelopContainer, .winContainer, .lossContainer {
+  display: flex;
+  font-weight: normal;
+}
+
+
+.win{
+  display:none;
+  font-size: 24px;
+  color: #27c39f;
+}
+
+.loss {
+  display: none;
+  color: #d83838;
+  display:none;
+  font-size: 30px;
+}
+
+.UserNameContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.UserName{
+  color: white;
+  font-size: 15px
+}
+
+.UserNameInput{
+  width: 50%;
+}
+
+.SubmitButton {
+  height: 30px;
+  width: 55%;
+  border: none;
+  border: 5px double #2761c3;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  background-color: transparent;
+  color: #ddebf0;
+  overflow: hidden;
+  transition: 1s;
+}
+
+#message-container {
+  width:100%;
+  height:auto;
+  text-align: center;
+  color: white;
+}
+
+#table-container {
+  width:100%;
+  height:auto;
+}
+
+#pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:100%;
+  height: 25px;
+  color:white;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  color:white
+}
+
+th, td {
+  border: 3px solid #2761c3;
+  padding: 5px;
+}
+
+.PrevButton, .NextButton {
+  border: 3px double #2761c3;
+  color: white;
+  background-color: transparent;
+  border-radius: 20px;
+  margin: 5px;
+  padding: 3px;
 }

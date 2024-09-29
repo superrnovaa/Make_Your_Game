@@ -4,15 +4,33 @@
 <head>
     <meta charset="utf-8">
     <title>PacMan</title>
-    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="/Style/Style.css">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <script src="PacMan.js" charset="utf-8"></script>
+    <script type="module" src="Js/PacMan.js" charset="utf-8"></script>
+    <script  type="module" src="Js/Levels.js" charset="utf-8"></script>
+    <script src="Js/ScoreHandling.js" charset="utf-8"></script>
+    <script src="Js/History.js" charset="utf-8"></script>
 </head>
 
 <body>
-    <main>
+    <main class="main">
+        <div class="info">
+            <div id="message-container"></div>
+            <div id="table-container"></div>
+            <div id="pagination"></div>
+        </div>
         <div class="game">
-            <div class="grid"></div>
+            <div class="grid">
+                <div class="FormContainer">
+                    <p class="loss">Game Over</p>
+                    <p class="win">Congrats You Won! </p>
+                    <div class="UserNameContainer">
+                        <p class="UserName">User Name:</p>
+                        <input type="text" class="UserNameInput" required>
+                    </div>
+                    <button class="SubmitButton">Submit Score</button>
+                </div>
+            </div>
         </div>
         <div class="info">
             <button class="StartButton">P L A Y</button>
@@ -24,8 +42,8 @@
             </div>
             <div class="LivesContainer">
                 <p>Lives:</p>
-                <div class="Life"><img class="PacLifeImage" src="Images/pacRight.svg"></div>
-                <div class="Life"><img class="PacLifeImage" src="Images/pacRight.svg"></div>
+                <div class="Life"><img class="PacLifeImage" src="Style/Images/pacRight.svg"></div>
+                <div class="Life"><img class="PacLifeImage" src="Style/Images/pacRight.svg"></div>
             </div>
             <button class="RestartButton">
                 <svg class="svg-icon" fill="none" height="20" viewBox="0 0 20 20" width="20"
